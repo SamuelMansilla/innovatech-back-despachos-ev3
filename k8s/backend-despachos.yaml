@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: innovatech-back-despachos
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: back-despachos
+  template:
+    metadata:
+      labels:
+        app: back-despachos
+    spec:
+      containers:
+      - name: back-despachos
+        image: 495256692270.dkr.ecr.us-east-1.amazonaws.com/innovatech-back-despachos-ev3:latest
+        ports:
+        - containerPort: 8082
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "200m"
+            memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: back-despachos-service
+  namespace: default
+spec:
+  ports:
+  - port: 8082
+    targetPort: 8082
+  selector:
+    app: back-despachos
+  type: ClusterIP
